@@ -52,6 +52,16 @@
   burger.addEventListener('click', () => toggleMenu(!document.body.classList.contains('menu-open')));
   $$('.mobile-menu a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
 
+  /* ---------- Lazy autoplay videos ---------- */
+  const vio = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); }
+      else v.pause();
+    });
+  }, { rootMargin: '200px 0px' });
+  $$('video[data-autoplay]').forEach(v => vio.observe(v));
+
   /* ---------- Reveal ---------- */
   const rio = new IntersectionObserver(entries => {
     entries.forEach(e => {
