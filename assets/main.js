@@ -24,8 +24,9 @@
       .from('.hero__lead', { opacity: 0, y: 24, duration: 1 }, '-=.9')
       .from('.hero__actions > *', { opacity: 0, y: 24, duration: 1, stagger: .08 }, '-=.8')
       .from('.hero__chips li', { opacity: 0, y: 16, duration: .8, stagger: .06 }, '-=.8')
-      .from('.hero__bubble', { scale: 0, rotate: -20, duration: 1.2, ease: 'back.out(1.6)' }, '-=1')
-      .from('.hero__tabs, .hero__scroll', { opacity: 0, duration: 1 }, '-=.8');
+      .from('.hero__photo', { clipPath: 'inset(100% 0 0 0 round 28px)', duration: 1.6, ease: 'expo.inOut' }, 0)
+      .from('.hero__award', { opacity: 0, x: -30, duration: 1 }, '-=.6')
+      .from('.hero__stamp', { scale: 0, rotate: -90, duration: 1.2, ease: 'back.out(1.6)' }, '-=.9');
   }
 
   /* ---------- Nav ---------- */
@@ -50,40 +51,6 @@
   };
   burger.addEventListener('click', () => toggleMenu(!document.body.classList.contains('menu-open')));
   $$('.mobile-menu a').forEach(a => a.addEventListener('click', () => toggleMenu(false)));
-
-  /* ---------- Hero video carousel ---------- */
-  const vids = $$('.hero__vid');
-  const tabs = $$('.hero__tabs button');
-  let cur = 0, timer;
-  const show = (i) => {
-    vids[cur].classList.remove('is-active');
-    tabs[cur].classList.remove('is-active');
-    cur = i;
-    const v = vids[cur];
-    if (v.preload === 'none') v.preload = 'auto';
-    v.currentTime = 0;
-    v.play().catch(() => {});
-    v.classList.add('is-active');
-    // restart tab progress animation
-    const t = tabs[cur]; t.classList.remove('is-active'); void t.offsetWidth; t.classList.add('is-active');
-    clearTimeout(timer);
-    timer = setTimeout(() => show((cur + 1) % vids.length), 6000);
-  };
-  tabs.forEach(t => t.addEventListener('click', () => show(+t.dataset.i)));
-  vids[0].play().catch(() => {});
-  timer = setTimeout(() => show(1), 6000);
-  // warm up next videos after load
-  addEventListener('load', () => setTimeout(() => vids.forEach(v => (v.preload = 'auto')), 1500));
-
-  /* ---------- Lazy autoplay videos ---------- */
-  const vio = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      const v = e.target;
-      if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); }
-      else v.pause();
-    });
-  }, { rootMargin: '200px 0px' });
-  $$('video[data-autoplay]').forEach(v => vio.observe(v));
 
   /* ---------- Reveal ---------- */
   const rio = new IntersectionObserver(entries => {
@@ -118,12 +85,10 @@
   /* ---------- Parallax (GSAP) ---------- */
   if (hasGsap && window.ScrollTrigger && !reduced) {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.to('.hero__media', { yPercent: 18, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.to('.hero__content', { y: -80, opacity: .2, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
-    $$('.road > video, .zone > video').forEach(v => {
-      gsap.fromTo(v, { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: v.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
-    });
+    gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
+    gsap.fromTo('.zone__bg', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.zone', start: 'top bottom', end: 'bottom top', scrub: true } });
     gsap.fromTo('.footer__giant', { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
   }
 
