@@ -46,11 +46,18 @@
   };
   addEventListener('resize', onWidthChange);
   addEventListener('orientationchange', () => setTimeout(onWidthChange, 250));
+  // Phones/tablets: the header never hides, so nothing moves while the browser
+  // toolbar collapses or reappears. Desktop: hide on scroll down past a threshold.
+  const touchLayout = matchMedia('(max-width: 860px), (hover: none)');
   const onScroll = () => {
-    const y = scrollY;
+    const y = Math.max(0, scrollY);
     nav.classList.toggle('is-scrolled', y > 40);
-    nav.classList.toggle('is-hidden', y > lastY && y > 600 && !document.body.classList.contains('menu-open'));
-    lastY = y;
+    if (touchLayout.matches) {
+      nav.classList.remove('is-hidden');
+    } else if (Math.abs(y - lastY) > 12) {
+      nav.classList.toggle('is-hidden', y > lastY && y > 600 && !document.body.classList.contains('menu-open'));
+      lastY = y;
+    }
     if (bar) bar.classList.toggle('is-visible', y > vh * 70);
   };
   addEventListener('scroll', onScroll, { passive: true });
@@ -110,11 +117,15 @@
     gsap.registerPlugin(ScrollTrigger);
     // Height-only resizes (mobile address bar) must not re-measure triggers.
     ScrollTrigger.config({ ignoreMobileResize: true, autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' });
-    gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-    gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
-    gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
-    gsap.fromTo('.zone__bg', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.zone', start: 'top bottom', end: 'bottom top', scrub: true } });
-    gsap.fromTo('.footer__giant', { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    // Scroll-linked parallax only on large screens with a mouse: on phones, iOS
+    // momentum scrolling feeds JS in bursts and the images would jump.
+    gsap.matchMedia().add('(min-width: 861px) and (hover: hover)', () => {
+      gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.fromTo('.zone__bg', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.zone', start: 'top bottom', end: 'bottom top', scrub: true } });
+      gsap.fromTo('.footer__giant', { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    });
   }
 
   /* ---------- Open now ---------- */
