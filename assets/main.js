@@ -33,12 +33,25 @@
   const nav = $('.nav');
   const bar = $('.sticky-bar');
   let lastY = 0;
+  // Viewport height measured once (see the inline --vh script in <head>); only a width change
+  // (rotation, desktop resize) updates it, so the mobile address bar never causes jumps.
+  let vh = innerHeight / 100;
+  let lastW = innerWidth;
+  const onWidthChange = () => {
+    if (innerWidth === lastW) return;
+    lastW = innerWidth;
+    vh = innerHeight / 100;
+    document.documentElement.style.setProperty('--vh', vh + 'px');
+    if (window.ScrollTrigger) ScrollTrigger.refresh();
+  };
+  addEventListener('resize', onWidthChange);
+  addEventListener('orientationchange', () => setTimeout(onWidthChange, 250));
   const onScroll = () => {
     const y = scrollY;
     nav.classList.toggle('is-scrolled', y > 40);
     nav.classList.toggle('is-hidden', y > lastY && y > 600 && !document.body.classList.contains('menu-open'));
     lastY = y;
-    if (bar) bar.classList.toggle('is-visible', y > innerHeight * .7);
+    if (bar) bar.classList.toggle('is-visible', y > vh * 70);
   };
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
@@ -95,6 +108,8 @@
   /* ---------- Parallax (GSAP) ---------- */
   if (hasGsap && window.ScrollTrigger && !reduced) {
     gsap.registerPlugin(ScrollTrigger);
+    // Height-only resizes (mobile address bar) must not re-measure triggers.
+    ScrollTrigger.config({ ignoreMobileResize: true, autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' });
     gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
     gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
