@@ -2,32 +2,11 @@
   const $ = (s, c = document) => c.querySelector(s);
   const $$ = (s, c = document) => [...c.querySelectorAll(s)];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const hasGsap = typeof window.gsap !== 'undefined';
 
-  /* ---------- Loader ---------- */
-  let introDone = false;
-  const finishLoad = () => {
-    if (introDone) return;
-    introDone = true;
-    document.body.classList.add('loaded');
-    heroIntro();
-  };
+  /* ---------- Loader (the hero intro is pure CSS, triggered by body.loaded) ---------- */
+  const finishLoad = () => document.body.classList.add('loaded');
   window.addEventListener('load', finishLoad);
   setTimeout(finishLoad, 1600);
-
-  /* ---------- Hero intro ---------- */
-  function heroIntro() {
-    if (!hasGsap || reduced || !$('.hero')) return;
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-    tl.from('.hero__title .line > span', { yPercent: 110, duration: 1.4, stagger: .12 })
-      .from('.hero .eyebrow', { opacity: 0, y: 20, duration: 1 }, '-=1.1')
-      .from('.hero__lead', { opacity: 0, y: 24, duration: 1 }, '-=.9')
-      .from('.hero__actions > *', { opacity: 0, y: 24, duration: 1, stagger: .08 }, '-=.8')
-      .from('.hero__chips li', { opacity: 0, y: 16, duration: .8, stagger: .06 }, '-=.8')
-      .from('.hero__photo', { clipPath: 'inset(100% 0 0 0 round 28px)', duration: 1.6, ease: 'expo.inOut' }, 0)
-      .from('.hero__award', { opacity: 0, x: -30, duration: 1 }, '-=.6')
-      .from('.hero__stamp', { scale: 0, rotate: -90, duration: 1.2, ease: 'back.out(1.6)' }, '-=.9');
-  }
 
   /* ---------- Nav ---------- */
   const nav = $('.nav');
@@ -42,7 +21,7 @@
     lastW = innerWidth;
     vh = innerHeight / 100;
     document.documentElement.style.setProperty('--vh', vh + 'px');
-    if (window.ScrollTrigger) ScrollTrigger.refresh();
+    updateParallax();
   };
   addEventListener('resize', onWidthChange);
   addEventListener('orientationchange', () => setTimeout(onWidthChange, 250));
@@ -112,22 +91,29 @@
   }, { threshold: .6 });
   $$('[data-count]').forEach(el => cio.observe(el));
 
-  /* ---------- Parallax (GSAP) ---------- */
-  if (hasGsap && window.ScrollTrigger && !reduced) {
-    gsap.registerPlugin(ScrollTrigger);
-    // Height-only resizes (mobile address bar) must not re-measure triggers.
-    ScrollTrigger.config({ ignoreMobileResize: true, autoRefreshEvents: 'visibilitychange,DOMContentLoaded,load' });
-    // Scroll-linked parallax only on large screens with a mouse: on phones, iOS
-    // momentum scrolling feeds JS in bursts and the images would jump.
-    gsap.matchMedia().add('(min-width: 861px) and (hover: hover)', () => {
-      const has = sel => !!$(sel);
-      if (has('.hero__photo img')) gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-      if (has('.shop__float')) gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
-      if (has('.expert__second')) gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
-      if (has('.zone__bg')) gsap.fromTo('.zone__bg', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.zone', start: 'top bottom', end: 'bottom top', scrub: true } });
-      if (has('.footer__giant')) gsap.fromTo('.footer__giant', { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
-    });
+  /* ---------- Parallax (desktop with a mouse only) ---------- */
+  // On phones, iOS momentum scrolling feeds JS in bursts and the images would jump,
+  // so nothing here runs below 861px or on touch screens.
+  const desktop = matchMedia('(min-width: 861px) and (hover: hover)');
+  const clamp01 = v => Math.min(1, Math.max(0, v));
+  // progress of `trigger` from "its top hits the viewport bottom" (0) to "its bottom leaves the top" (1)
+  const through = el => { const r = el.getBoundingClientRect(); return clamp01((innerHeight - r.top) / (innerHeight + r.height)); };
+  const fx = [
+    ['.hero__photo img', '.hero', (el, t) => { const r = t.getBoundingClientRect(); el.style.transform = `translate3d(0,${-12 * clamp01(-r.top / r.height)}%,0)`; }],
+    ['.shop__float', '.shop', (el, t) => { el.style.transform = `translate3d(0,${80 - 120 * through(t)}px,0)`; }],
+    ['.expert__second', '.expert', (el, t) => { el.style.transform = `translate3d(0,${60 - 90 * through(t)}px,0)`; }],
+    ['.zone__bg', '.zone', (el, t) => { el.style.transform = `scale(${1.18 - .18 * through(t)})`; }],
+    ['.footer__giant', '.footer', (el, t) => { el.style.transform = `translate3d(${8 - 16 * through(t)}%,0,0)`; }]
+  ].map(([sel, trig, fn]) => [$(sel), $(trig), fn]).filter(([el, t]) => el && t);
+  let pxQueued = false;
+  function updateParallax() {
+    pxQueued = false;
+    if (reduced || !desktop.matches) { fx.forEach(([el]) => (el.style.transform = '')); return; }
+    fx.forEach(([el, t, fn]) => fn(el, t));
   }
+  addEventListener('scroll', () => { if (!pxQueued && desktop.matches && !reduced) { pxQueued = true; requestAnimationFrame(updateParallax); } }, { passive: true });
+  desktop.addEventListener('change', updateParallax);
+  updateParallax();
 
   /* ---------- Open now ---------- */
   const openEl = $('[data-open]');
@@ -247,16 +233,6 @@
 
   form.addEventListener('submit', e => {
     if (!validate()) { e.preventDefault(); return; }
-    if (form.action.includes('REMPLACER_PAR_EMAIL')) {
-      // Fallback until the receiving e-mail is configured: open the visitor's mail app.
-      e.preventDefault();
-      const data = new FormData(form);
-      const lines = [];
-      for (const [k, v] of data) if (!k.startsWith('_') && typeof v === 'string' && v) lines.push(`${k} : ${v}`);
-      alert('Formulaire en cours de configuration. Votre demande va s\'ouvrir dans votre messagerie, vous pouvez aussi nous appeler au 04 68 59 77 81.');
-      location.href = 'mailto:?subject=' + encodeURIComponent('Demande de devis EDM') + '&body=' + encodeURIComponent(lines.join('\n'));
-      return;
-    }
     form.classList.add('is-sending');
     btnSubmit.firstChild.textContent = 'Envoi en cours… ';
   });

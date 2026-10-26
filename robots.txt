@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /merci.html
+
+Sitemap: https://flavio-k66.github.io/edm-perpignan/sitemap.xml
