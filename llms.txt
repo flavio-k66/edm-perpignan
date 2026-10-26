@@ -1,0 +1,31 @@
+# EDM Electro Dépannage Ménager
+
+> Entreprise de Perpignan (Pyrénées-Orientales, Occitanie) spécialisée dans la vente, la réparation, l'installation et l'entretien d'électroménager toutes marques et d'équipements de cuisine et de froid professionnels. Réparateur labellisé QualiRépar. Slogan : « Ne jetez plus, nous réparons ! »
+
+## Informations clés
+
+- Raison sociale : E.D.M. Electro Dépannage Ménager (SARL), SIREN 528 229 040, créée en 2010
+- Gérant : Bruno Simarro, 1er technicien de la région Occitanie et 9e au niveau national au Concours du Meilleur Technicien du Groupe SEB
+- Expérience : 30 ans dans le métier ; plus de 50 marques réparables
+- Adresse : 300 A rue Aristide Bergès, Polygone Nord, 66000 Perpignan
+- Téléphone : 04 68 59 77 81 · E-mail : contact@edm66.fr
+- Horaires : du lundi au vendredi, 8h–12h et 14h–18h ; fermé le week-end
+- Zone d'intervention : toutes les Pyrénées-Orientales et l'est de l'Aude (Narbonne, Port-Leucate, Port-la-Nouvelle, Sigean, Lézignan-Corbières)
+
+## Professionnels (CHR, boulangeries, collectivités)
+
+- Vente, leasing, installation, maintenance et dépannage : fours mixtes, cuisson, froid, laverie, boulangerie-pâtisserie, buanderie
+- Intervention urgente en 4 heures maximum ; 24 à 48 heures en temps normal
+- Contrats de maintenance de 1 à 2 passages par an ; membre du groupement GASEL
+
+## Particuliers
+
+- Réparation de gros et petit électroménager, à domicile ou en atelier, garantie 3 mois
+- Devis en atelier : 20 € pour le petit électroménager, 30 € pour le gros électroménager, sans rendez-vous aux horaires d'ouverture
+- Bonus réparation de l'État (QualiRépar) déduit directement de la facture
+
+## Pages
+
+- [Accueil](https://flavio-k66.github.io/edm-perpignan/): services aux professionnels et aux particuliers, réalisations, avis, zone d'intervention, formulaire de devis
+- [Showroom](https://flavio-k66.github.io/edm-perpignan/showroom.html): vente et leasing d'équipement de cuisine professionnelle
+- [Mentions légales](https://flavio-k66.github.io/edm-perpignan/mentions-legales.html)
