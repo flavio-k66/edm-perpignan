@@ -17,7 +17,7 @@
 
   /* ---------- Hero intro ---------- */
   function heroIntro() {
-    if (!hasGsap || reduced) return;
+    if (!hasGsap || reduced || !$('.hero')) return;
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
     tl.from('.hero__title .line > span', { yPercent: 110, duration: 1.4, stagger: .12 })
       .from('.hero .eyebrow', { opacity: 0, y: 20, duration: 1 }, '-=1.1')
@@ -120,11 +120,12 @@
     // Scroll-linked parallax only on large screens with a mouse: on phones, iOS
     // momentum scrolling feeds JS in bursts and the images would jump.
     gsap.matchMedia().add('(min-width: 861px) and (hover: hover)', () => {
-      gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-      gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
-      gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
-      gsap.fromTo('.zone__bg', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.zone', start: 'top bottom', end: 'bottom top', scrub: true } });
-      gsap.fromTo('.footer__giant', { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+      const has = sel => !!$(sel);
+      if (has('.hero__photo img')) gsap.to('.hero__photo img', { yPercent: -12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+      if (has('.shop__float')) gsap.fromTo('.shop__float', { y: 80 }, { y: -40, ease: 'none', scrollTrigger: { trigger: '.shop', start: 'top bottom', end: 'bottom top', scrub: true } });
+      if (has('.expert__second')) gsap.fromTo('.expert__second', { y: 60 }, { y: -30, ease: 'none', scrollTrigger: { trigger: '.expert', start: 'top bottom', end: 'bottom top', scrub: true } });
+      if (has('.zone__bg')) gsap.fromTo('.zone__bg', { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '.zone', start: 'top bottom', end: 'bottom top', scrub: true } });
+      if (has('.footer__giant')) gsap.fromTo('.footer__giant', { xPercent: 8 }, { xPercent: -8, ease: 'none', scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true } });
     });
   }
 
@@ -140,6 +141,23 @@
     openEl.classList.toggle('is-open', open);
   }
   $$('[data-year]').forEach(el => (el.textContent = new Date().getFullYear()));
+
+  /* ---------- Showroom products ---------- */
+  const grid = $('#produits');
+  const products = window.EDM_PRODUCTS || [];
+  if (grid && products.length) {
+    const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    grid.innerHTML = products.map(p => {
+      const ask = 'index.html?profil=Professionnel&demande=installation&produit=' + encodeURIComponent(p.nom) + '#devis';
+      const href = p.lienPaiement || ask;
+      return `<article class="sr-product reveal is-in">
+        <figure><img src="${esc(p.image)}" alt="${esc(p.nom)}" loading="lazy"></figure>
+        <div><span class="tag tag--lime">${esc(p.categorie)}</span><h3>${esc(p.nom)}</h3><p>${esc(p.description)}</p>
+        <div class="sr-product__foot"><b>${esc(p.prix || 'Prix sur demande')}</b><a class="btn btn--red btn--sm" href="${esc(href)}">${p.lienPaiement ? 'Acheter' : 'Demander un prix'}</a></div></div>
+      </article>`;
+    }).join('');
+    grid.hidden = false;
+  }
 
   /* ---------- Quote form ---------- */
   const form = $('#devis-form');
@@ -161,6 +179,19 @@
   };
   $$('input[name="Profil"]', form).forEach(r => r.addEventListener('change', () => setProfile(r.value)));
   setProfile('Particulier');
+
+  const qs = new URLSearchParams(location.search);
+  const pick = (name, test) => {
+    const r = $$(`input[name="${name}"]`, form).find(i => !i.disabled && test(i.value));
+    if (r) r.checked = true;
+  };
+  if (qs.get('profil')) {
+    pick('Profil', v => v === qs.get('profil'));
+    setProfile(qs.get('profil'));
+  }
+  if (qs.get('demande') === 'installation') pick('Demande', v => v.startsWith('Installation'));
+  if (qs.get('appareil')) pick('Appareil', v => v === qs.get('appareil'));
+  if (qs.get('produit')) $('#f-desc').value = 'Demande de prix : ' + qs.get('produit');
 
   // Clicking a pro card pre-selects "Professionnel"
   $$('[data-type="pro"]').forEach(a => a.addEventListener('click', () => {
