@@ -286,8 +286,6 @@ body.menu-open .mobile-menu{clip-path:circle(150% at calc(100% - 40px) 40px);vis
 .quote__phone:hover{transform:translateY(-3px)}
 .quote__phone small{font-size:13px;color:var(--lime);font-family:var(--f-head);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
 .quote__phone b{font-family:var(--f-head);font-size:32px;font-weight:600;letter-spacing:-.02em}
-.quote__img{margin:34px 0 0;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3}
-.quote__img img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
 .form{background:#fff;border-radius:28px;padding:clamp(24px,4vw,48px);box-shadow:0 40px 80px -40px rgba(18,21,25,.25);border:1px solid var(--line-dark)}
 .hp{position:absolute;left:-9999px}
 .form__progress{height:4px;border-radius:4px;background:var(--paper);overflow:hidden}
@@ -455,11 +453,13 @@ legend{font-family:var(--f-head);font-size:clamp(22px,2vw,28px);font-weight:600;
 /* ---------- Price card (particuliers) ---------- */
 .card--price{background:var(--ink)}
 .card--price::after{display:none}
-.price{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:30px}
+.card--price{grid-column:1 / -1}
+.price{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;gap:40px;padding:30px 44px}
+.price__text{display:flex;flex-direction:column;max-width:560px}
 .price .tag{align-self:flex-start}
 .price h3{font-size:clamp(24px,2.4vw,32px);margin:14px 0 6px}
-.price>p{color:rgba(255,255,255,.65);margin-bottom:22px}
-.price__grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.price__text p{color:rgba(255,255,255,.65)}
+.price__grid{flex:0 0 min(480px,46%);display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .price__grid div{padding:16px 18px;border-radius:var(--radius-s);background:rgba(255,255,255,.06);border:1px solid var(--line)}
 .price__grid small{display:block;font-size:13px;color:rgba(255,255,255,.65)}
 .price__grid b{font-family:var(--f-head);font-size:clamp(30px,3vw,40px);font-weight:700;color:var(--lime);letter-spacing:-.02em;line-height:1.1}
@@ -570,6 +570,12 @@ legend{font-family:var(--f-head);font-size:clamp(22px,2vw,28px);font-weight:600;
 .crumbs a{color:var(--ink);text-decoration:underline;text-underline-offset:3px}
 .crumbs a:hover{color:var(--red)}
 
+/* ---------- Adjacent sections with the same background ---------- */
+.method{padding-bottom:clamp(56px,6vw,84px)}
+.method + .shop{padding-top:clamp(24px,3vw,40px)}
+.quote{padding-bottom:clamp(56px,6vw,84px)}
+.quote + .insta{padding-top:clamp(24px,3vw,40px)}
+
 /* ---------- Sticky mobile bar ---------- */
 .sticky-bar{display:none}
 
@@ -644,7 +650,8 @@ legend{font-family:var(--f-head);font-size:clamp(22px,2vw,28px);font-weight:600;
   .urgent{padding:18px}
   .urgent__side{width:100%;justify-content:space-between;gap:12px;padding-top:14px;border-top:1px solid rgba(227,6,19,.3)}
   .card--price{min-height:340px}
-  .price{padding:24px}
+  .price{position:relative;inset:auto;flex-direction:column;align-items:stretch;justify-content:center;gap:22px;padding:28px 24px}
+  .price__grid{flex:none}
   .aides{grid-template-columns:1fr}
   .eco__bubble{width:96px}
   .sr-hero{padding:120px 0 50px}
@@ -685,8 +692,7 @@ legend{font-family:var(--f-head);font-size:clamp(22px,2vw,28px);font-weight:600;
   .review--big{grid-row:auto}
   .review--cta{grid-column:auto}
   .quote__aside{position:static}
-  .quote__img{display:none}
-  .choice--3{grid-template-columns:1fr}
+    .choice--3{grid-template-columns:1fr}
   .choice--2,.grid2{grid-template-columns:1fr}
   .perks{grid-template-columns:1fr}
   .footer__top{grid-template-columns:1fr}
