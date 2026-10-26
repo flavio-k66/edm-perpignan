@@ -231,9 +231,29 @@
 
   $('input[name="_next"]', form).value = new URL('merci.html', location.href).href;
 
-  form.addEventListener('submit', e => {
-    if (!validate()) { e.preventDefault(); return; }
+  // Sending: first through the site's own /api/devis function (Resend, Cloudflare Pages).
+  // If it is unavailable (static hosting) or fails, the form is posted to FormSubmit instead.
+  let sending = false;
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (sending || !validate()) return;
+    sending = true;
     form.classList.add('is-sending');
     btnSubmit.firstChild.textContent = 'Envoi en cours… ';
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20000);
+    try {
+      const res = await fetch('api/devis', { method: 'POST', body: new FormData(form), signal: ctrl.signal });
+      const out = res.headers.get('content-type')?.includes('application/json') ? await res.json() : null;
+      clearTimeout(timer);
+      if (res.ok && out?.ok) { location.href = 'merci.html'; return; }
+      if (res.status === 400 && out?.error === 'champs') {
+        err.textContent = 'Merci de vérifier votre nom, votre téléphone, votre commune et la description.';
+        err.hidden = false; sending = false; form.classList.remove('is-sending');
+        btnSubmit.firstChild.textContent = 'Envoyer ma demande ';
+        return;
+      }
+    } catch { clearTimeout(timer); }
+    form.submit(); // backup sender (FormSubmit), redirects to merci.html
   });
 })();
