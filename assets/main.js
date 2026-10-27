@@ -134,7 +134,7 @@
   if (grid && products.length) {
     const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
     grid.innerHTML = products.map(p => {
-      const ask = 'index.html?profil=Professionnel&demande=installation&produit=' + encodeURIComponent(p.nom) + '#devis';
+      const ask = 'index.html?profil=Professionnel&demande=projet&produit=' + encodeURIComponent(p.nom) + '#devis';
       const href = p.lienPaiement || ask;
       return `<article class="sr-product reveal is-in">
         <figure><img src="${esc(p.image)}" alt="${esc(p.nom)}" loading="lazy"></figure>
@@ -157,11 +157,14 @@
 
   const setProfile = (val) => {
     const pro = val === 'Professionnel';
-    $$('.chips[data-group]', form).forEach(g => {
+    $$('[data-group]', form).forEach(g => {
       const on = g.dataset.group === (pro ? 'pro' : 'part');
       g.hidden = !on;
       $$('input', g).forEach(i => { i.disabled = !on; if (!on) i.checked = false; });
     });
+    // Demande : toujours un choix coché dans le groupe visible
+    const dem = $$('input[name="Demande"]', form).filter(i => !i.disabled);
+    if (!dem.some(i => i.checked)) dem[0].checked = true;
   };
   $$('input[name="Profil"]', form).forEach(r => r.addEventListener('change', () => setProfile(r.value)));
   setProfile('Particulier');
@@ -175,7 +178,7 @@
     pick('Profil', v => v === qs.get('profil'));
     setProfile(qs.get('profil'));
   }
-  if (qs.get('demande') === 'installation') pick('Demande', v => v.startsWith('Installation'));
+  if (/^(projet|installation)$/.test(qs.get('demande') || '')) pick('Demande', v => v === 'Projet');
   if (qs.get('appareil')) pick('Appareil', v => v === qs.get('appareil'));
   if (qs.get('produit')) $('#f-desc').value = 'Demande de prix : ' + qs.get('produit');
 
