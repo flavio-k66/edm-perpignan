@@ -27,7 +27,7 @@ window.EDM_CATALOGUE = {
   {
    "id": "destockage",
    "nom": "Déstockage",
-   "intro": "Matériel en stock, prix affichés, dans la limite des quantités disponibles."
+   "intro": "Matériel en stock, prix HT affichés, dans la limite des quantités disponibles."
   }
  ],
  "produits": [
@@ -79,8 +79,8 @@ window.EDM_CATALOGUE = {
   {
    "cat": "cuisson",
    "slug": "friteuse-electrique-tecnoinox-frs35e7",
-   "nom": "Friteuse électrique Tecnoinox Tecno70 FRS35E7, 14 L",
-   "marque": "Tecnoinox",
+   "nom": "Friteuse électrique Furnotel FRS35E7, 14 L",
+   "marque": "Furnotel",
    "reference": "FRS35E7 (616035)",
    "description": "Friteuse électrique sur placard fermé, avec une cuve de 14 litres et des résistances basculantes qui facilitent le nettoyage. Température réglable de 100 à 190 °C. Paniers, couvercle et bac de récupération de l'huile sont fournis.",
    "points": [
@@ -176,7 +176,7 @@ window.EDM_CATALOGUE = {
    "points": [
     "Jusqu'à 47 kg de glaçons par 24 h",
     "Stockage de 18 kg",
-    "Glaçons cube standard (L)"
+    "Garantie 3 ans pièces et main-d’œuvre"
    ],
    "image": "assets/img/catalogue/froid/machine-a-glacons-hoshizaki-im-45pe.jpg",
    "pdf": "assets/fiches/froid/machine-a-glacons-hoshizaki-im-45pe.pdf"
@@ -199,13 +199,13 @@ window.EDM_CATALOGUE = {
   {
    "cat": "froid",
    "slug": "refrigerateur-sous-comptoir-infrico-msg2000",
-   "nom": "Réfrigérateur sous comptoir Infrico MSG2000",
+   "nom": "Réfrigérateur bas à tiroirs Infrico MSG2000",
    "marque": "Infrico",
    "reference": "MSG2000",
-   "description": "Réfrigérateur bas en inox AISI 304, de -2 °C à +8 °C, d'une hauteur de 650 mm. Il se glisse sous un plan de travail ou un équipement de cuisson pour garder vos produits frais au plus près du poste, au format GN 1/1.",
+   "description": "Réfrigérateur bas à tiroirs en inox AISI 304, de -2 °C à +8 °C, d'une hauteur de 650 mm. Il se glisse sous un plan de travail ou un équipement de cuisson pour garder vos produits frais au plus près du poste, au format GN 1/1.",
    "points": [
+    "Tiroirs GN 1/1",
     "310 litres, de -2 °C à +8 °C",
-    "Format GN 1/1",
     "2000 x 700 x 650 mm"
    ],
    "image": "assets/img/catalogue/froid/refrigerateur-sous-comptoir-infrico-msg2000.jpg",
@@ -405,15 +405,15 @@ window.EDM_CATALOGUE = {
    ],
    "image": "assets/img/catalogue/destockage/refrigerateur-smeg-spr07pdxr.jpg",
    "pdf": "assets/fiches/destockage/refrigerateur-smeg-spr07pdxr.pdf",
-   "prix": "1 900 €"
+   "prix": "1 900 € HT"
   },
   {
    "cat": "destockage",
    "slug": "mixeur-plongeant-hendi-blend",
-   "nom": "Mixeur plongeant Hendi Blend",
+   "nom": "Blender plongeant Hendi Blend",
    "marque": "Hendi",
    "reference": "222157",
-   "description": "Mixeur plongeant de 250 W avec 6 vitesses et écran LCD, en ABS avec manche en inox. Sa lame en croix en inox revêtue de titane tourne jusqu'à 13 500 tr/min. Il convient pour des préparations de 1 à 8 litres en cuisine.",
+   "description": "Blender plongeant de 250 W avec 6 vitesses et écran LCD, en ABS avec manche en inox. Sa lame en croix en inox revêtue de titane tourne jusqu'à 13 500 tr/min. Il convient pour des préparations de 1 à 8 litres en cuisine.",
    "points": [
     "250 W, 6 vitesses, écran LCD",
     "Jusqu'à 13 500 tr/min",
@@ -421,7 +421,7 @@ window.EDM_CATALOGUE = {
    ],
    "image": "assets/img/catalogue/destockage/mixeur-plongeant-hendi-blend.jpg",
    "pdf": "assets/fiches/destockage/mixeur-plongeant-hendi-blend.pdf",
-   "prix": "234 €"
+   "prix": "234 € HT"
   },
   {
    "cat": "destockage",
@@ -437,7 +437,7 @@ window.EDM_CATALOGUE = {
    ],
    "image": "assets/img/catalogue/destockage/chauffe-sauce-casselin-ccs2.jpg",
    "pdf": "assets/fiches/destockage/chauffe-sauce-casselin-ccs2.pdf",
-   "prix": "369 €"
+   "prix": "369 € HT"
   },
   {
    "cat": "destockage",
@@ -453,7 +453,7 @@ window.EDM_CATALOGUE = {
    ],
    "image": "assets/img/catalogue/destockage/gaufrier-krampouz-wecabaao.jpg",
    "pdf": "assets/fiches/destockage/gaufrier-krampouz-wecabaao.pdf",
-   "prix": "675,18 €"
+   "prix": "675,18 € HT"
   },
   {
    "cat": "destockage",
@@ -469,7 +469,7 @@ window.EDM_CATALOGUE = {
    ],
    "image": "assets/img/catalogue/destockage/plaque-induction-maxima-09371040.jpg",
    "pdf": "assets/fiches/destockage/plaque-induction-maxima-09371040.pdf",
-   "prix": "160 €"
+   "prix": "160 € HT"
   },
   {
    "cat": "destockage",
@@ -485,7 +485,7 @@ window.EDM_CATALOGUE = {
    ],
    "image": "assets/img/catalogue/destockage/balance-diamond-wr-30x1-l.jpg",
    "pdf": "assets/fiches/destockage/balance-diamond-wr-30x1-l.pdf",
-   "prix": "195 €"
+   "prix": "195 € HT"
   }
  ]
 };
