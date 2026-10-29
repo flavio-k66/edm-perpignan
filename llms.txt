@@ -28,4 +28,5 @@
 
 - [Accueil](https://flavio-k66.github.io/edm-perpignan/): services aux professionnels et aux particuliers, réalisations, avis, zone d'intervention, formulaire de devis
 - [Showroom](https://flavio-k66.github.io/edm-perpignan/showroom.html): vente et leasing d'équipement de cuisine professionnelle
+- Catalogue du showroom : [Cuisson](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=cuisson), [Froid](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=froid), [Laverie](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=laverie), [Préparation](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=preparation), [Déstockage](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=destockage) (fiches techniques, demande de devis ; prix affichés uniquement pour le déstockage)
 - [Mentions légales](https://flavio-k66.github.io/edm-perpignan/mentions-legales.html)
