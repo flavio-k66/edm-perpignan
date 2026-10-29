@@ -49,7 +49,7 @@
         </div>
       </article>`).join('');
     $('#cat-note').textContent = !items.length ? 'Les produits de cette catégorie arrivent bientôt. Appelez-nous au 04 68 59 77 81.'
-      : id === 'destockage' ? 'Prix indiqués dans la limite des stocks disponibles.' : '';
+      : id === 'destockage' ? 'Prix HT, dans la limite des stocks disponibles.' : '';
   }
 
   /* ---------- Fenêtre « Ma demande de devis » ---------- */
