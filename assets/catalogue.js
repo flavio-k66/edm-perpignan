@@ -419,7 +419,7 @@ window.EDM_CATALOGUE = {
     "Jusqu'à 13 500 tr/min",
     "Pour 1 à 8 litres"
    ],
-   "image": null,
+   "image": "assets/img/catalogue/destockage/mixeur-plongeant-hendi-blend.jpg",
    "pdf": "assets/fiches/destockage/mixeur-plongeant-hendi-blend.pdf",
    "prix": "234 €"
   },
