@@ -128,23 +128,6 @@
   }
   $$('[data-year]').forEach(el => (el.textContent = new Date().getFullYear()));
 
-  /* ---------- Showroom products ---------- */
-  const grid = $('#produits');
-  const products = window.EDM_PRODUCTS || [];
-  if (grid && products.length) {
-    const esc = t => String(t ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-    grid.innerHTML = products.map(p => {
-      const ask = 'index.html?profil=Professionnel&demande=projet&produit=' + encodeURIComponent(p.nom) + '#devis';
-      const href = p.lienPaiement || ask;
-      return `<article class="sr-product reveal is-in">
-        <figure><img src="${esc(p.image)}" alt="${esc(p.nom)}" loading="lazy"></figure>
-        <div><span class="tag tag--lime">${esc(p.categorie)}</span><h3>${esc(p.nom)}</h3><p>${esc(p.description)}</p>
-        <div class="sr-product__foot"><b>${esc(p.prix || 'Prix sur demande')}</b><a class="btn btn--red btn--sm" href="${esc(href)}">${p.lienPaiement ? 'Acheter' : 'Demander un prix'}</a></div></div>
-      </article>`;
-    }).join('');
-    grid.hidden = false;
-  }
-
   /* ---------- Quote form ---------- */
   const form = $('#devis-form');
   if (!form) return;
