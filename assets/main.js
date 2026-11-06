@@ -143,24 +143,15 @@
   // Retour arrière depuis le cache du navigateur : on retire le voile de couleur
   addEventListener('pageshow', e => { if (e.persisted) $$('.wipe').forEach(w => w.remove()); });
 
-  /* ---------- Aiguillage « Vous êtes… ? » ---------- */
-  const choose = $('.choose');
-  if (choose) {
+  /* ---------- Aiguillage : les deux moitiés glissent à l'apparition ---------- */
+  const panels = $$('.choose__panel');
+  if (panels.length) {
     const chio = new IntersectionObserver(entries => entries.forEach(e => {
       if (!e.isIntersecting) return;
       e.target.classList.add('is-in');
       chio.unobserve(e.target);
-    }), { threshold: .3 });
-    [choose, ...$$('.choose__panel', choose)].forEach(el => chio.observe(el));
-    // Relief 3D léger qui suit la souris (ordinateur uniquement)
-    if (desktop.matches && !reduced) $$('.choose__panel', choose).forEach(p => {
-      p.addEventListener('pointermove', e => {
-        const r = p.getBoundingClientRect();
-        p.style.setProperty('--rx', (((e.clientY - r.top) / r.height) - .5) * -5 + 'deg');
-        p.style.setProperty('--ry', (((e.clientX - r.left) / r.width) - .5) * 7 + 'deg');
-      });
-      p.addEventListener('pointerleave', () => { p.style.removeProperty('--rx'); p.style.removeProperty('--ry'); });
-    });
+    }), { threshold: .2 });
+    panels.forEach(el => chio.observe(el));
   }
 
   /* ---------- Open now ---------- */
