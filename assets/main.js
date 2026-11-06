@@ -136,26 +136,16 @@
   // Retour arrière depuis le cache du navigateur : on retire le voile de couleur
   addEventListener('pageshow', e => { if (e.persisted) $$('.wipe').forEach(w => w.remove()); });
 
-  /* ---------- Aiguillage « les deux portes » ---------- */
+  /* ---------- Aiguillage : les deux cartes glissent à l'apparition ---------- */
   const choose = $('.choose');
   if (choose) {
-    // On observe la section elle-même : les deux moitiés démarrent hors écran (décalées sur les côtés).
-    const chio = new IntersectionObserver(entries => {
-      if (!entries[0].isIntersecting) return;
-      choose.classList.add('is-in');
-      chio.disconnect();
-    }, { threshold: .3 });
-    chio.observe(choose);
+    const chio = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      chio.unobserve(e.target);
+    }), { threshold: .2 });
+    $$('.choose__panel', choose).forEach(el => chio.observe(el));
     new IntersectionObserver(entries => { chooseOnScreen = entries[0].intersectionRatio > .25; onScroll(); }, { threshold: [0, .25, .5] }).observe(choose);
-    // Ordinateur : le bouton rond « Entrer » suit la souris dans la moitié survolée
-    if (desktop.matches && !reduced) $$('.choose__panel', choose).forEach(p => {
-      const cur = $('.choose__cursor', p);
-      p.addEventListener('pointermove', e => {
-        const r = p.getBoundingClientRect();
-        cur.style.setProperty('--cx', (e.clientX - r.left) + 'px');
-        cur.style.setProperty('--cy', (e.clientY - r.top) + 'px');
-      });
-    });
   }
 
   /* ---------- Open now ---------- */
