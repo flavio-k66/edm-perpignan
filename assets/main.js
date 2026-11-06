@@ -55,7 +55,7 @@
   const vio = new IntersectionObserver(entries => {
     entries.forEach(e => {
       const v = e.target;
-      if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); }
+      if (e.isIntersecting) { if (reduced && v.closest('.choose')) return; v.preload = 'auto'; v.play().catch(() => {}); }
       else v.pause();
     });
   }, { rootMargin: '200px 0px' });
@@ -115,6 +115,54 @@
   desktop.addEventListener('change', updateParallax);
   updateParallax();
 
+  /* ---------- Espaces Particuliers / Professionnels : transition de couleur ---------- */
+  const root = document.documentElement;
+  if (root.classList.contains('wipe-in')) {
+    finishLoad();
+    requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('wipe-out')));
+    setTimeout(() => root.classList.remove('wipe-in', 'wipe-out', 'wipe-part', 'wipe-pro'), 900);
+  }
+  const WIPE_LABEL = { part: 'Espace particuliers', pro: 'Espace professionnels' };
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-aud]');
+    if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const url = new URL(a.href, location.href);
+    e.preventDefault();
+    if (document.body.classList.contains('menu-open')) toggleMenu(false);
+    if (url.pathname === location.pathname) { scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' }); return; }
+    if (reduced) { location.href = url.href; return; }
+    const w = document.createElement('div');
+    w.className = 'wipe wipe--' + a.dataset.aud;
+    w.textContent = WIPE_LABEL[a.dataset.aud];
+    if (e.clientX || e.clientY) { w.style.setProperty('--x', e.clientX + 'px'); w.style.setProperty('--y', e.clientY + 'px'); }
+    document.body.append(w);
+    requestAnimationFrame(() => requestAnimationFrame(() => w.classList.add('is-on')));
+    try { sessionStorage.setItem('edm-wipe', a.dataset.aud); } catch {}
+    setTimeout(() => { location.href = url.href; }, 620);
+  });
+  // Retour arrière depuis le cache du navigateur : on retire le voile de couleur
+  addEventListener('pageshow', e => { if (e.persisted) $$('.wipe').forEach(w => w.remove()); });
+
+  /* ---------- Aiguillage « Vous êtes… ? » ---------- */
+  const choose = $('.choose');
+  if (choose) {
+    const chio = new IntersectionObserver(entries => entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-in');
+      chio.unobserve(e.target);
+    }), { threshold: .3 });
+    [choose, ...$$('.choose__panel', choose)].forEach(el => chio.observe(el));
+    // Relief 3D léger qui suit la souris (ordinateur uniquement)
+    if (desktop.matches && !reduced) $$('.choose__panel', choose).forEach(p => {
+      p.addEventListener('pointermove', e => {
+        const r = p.getBoundingClientRect();
+        p.style.setProperty('--rx', (((e.clientY - r.top) / r.height) - .5) * -5 + 'deg');
+        p.style.setProperty('--ry', (((e.clientX - r.left) / r.width) - .5) * 7 + 'deg');
+      });
+      p.addEventListener('pointerleave', () => { p.style.removeProperty('--rx'); p.style.removeProperty('--ry'); });
+    });
+  }
+
   /* ---------- Open now ---------- */
   const openEl = $('[data-open]');
   if (openEl) {
@@ -150,14 +198,16 @@
     if (!dem.some(i => i.checked)) dem[0].checked = true;
   };
   $$('input[name="Profil"]', form).forEach(r => r.addEventListener('change', () => setProfile(r.value)));
-  setProfile('Particulier');
+  // Pages Particuliers / Professionnels : le profil est fixé par la page
+  const fixedProfil = $('input[type="hidden"][name="Profil"]', form);
+  setProfile(fixedProfil ? fixedProfil.value : 'Particulier');
 
   const qs = new URLSearchParams(location.search);
   const pick = (name, test) => {
     const r = $$(`input[name="${name}"]`, form).find(i => !i.disabled && test(i.value));
     if (r) r.checked = true;
   };
-  if (qs.get('profil')) {
+  if (qs.get('profil') && !fixedProfil) {
     pick('Profil', v => v === qs.get('profil'));
     setProfile(qs.get('profil'));
   }
