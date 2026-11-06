@@ -11,7 +11,6 @@
   /* ---------- Nav ---------- */
   const nav = $('.nav');
   const bar = $('.sticky-bar');
-  let lastY = 0;
   // Viewport height measured once (see the inline --vh script in <head>); only a width change
   // (rotation, desktop resize) updates it, so the mobile address bar never causes jumps.
   let vh = innerHeight / 100;
@@ -25,18 +24,10 @@
   };
   addEventListener('resize', onWidthChange);
   addEventListener('orientationchange', () => setTimeout(onWidthChange, 250));
-  // Phones/tablets: the header never hides, so nothing moves while the browser
-  // toolbar collapses or reappears. Desktop: hide on scroll down past a threshold.
-  const touchLayout = matchMedia('(max-width: 860px), (hover: none)');
+  // The header (with the Particuliers / Professionnels switch) always stays visible.
   const onScroll = () => {
     const y = Math.max(0, scrollY);
     nav.classList.toggle('is-scrolled', y > 40);
-    if (touchLayout.matches) {
-      nav.classList.remove('is-hidden');
-    } else if (Math.abs(y - lastY) > 12) {
-      nav.classList.toggle('is-hidden', y > lastY && y > 600 && !document.body.classList.contains('menu-open'));
-      lastY = y;
-    }
     if (bar) bar.classList.toggle('is-visible', y > vh * 70);
   };
   addEventListener('scroll', onScroll, { passive: true });
