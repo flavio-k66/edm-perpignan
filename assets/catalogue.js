@@ -409,18 +409,18 @@ window.EDM_CATALOGUE = {
   },
   {
    "cat": "destockage",
-   "slug": "mixeur-plongeant-hendi-blend",
-   "nom": "Blender plongeant Hendi Blend",
+   "slug": "blender-bar-hendi-230718",
+   "nom": "Blender Bar manuel Hendi",
    "marque": "Hendi",
-   "reference": "222157",
-   "description": "Blender plongeant de 250 W avec 6 vitesses et écran LCD, en ABS avec manche en inox. Sa lame en croix en inox revêtue de titane tourne jusqu'à 13 500 tr/min. Il convient pour des préparations de 1 à 8 litres en cuisine.",
+   "reference": "230718",
+   "description": "Blender de bar professionnel avec pichet transparent de 2,5 L et lames inox revêtues de titane. Son bouton à 10 niveaux de puissance et sa fonction pulsée servent aux smoothies, cocktails et desserts, et à piler la glace. Il ne démarre pas sans le pichet en place.",
    "points": [
-    "250 W, 6 vitesses, écran LCD",
-    "Jusqu'à 13 500 tr/min",
-    "Pour 1 à 8 litres"
+    "Pichet 2,5 L",
+    "1680 W, jusqu'à 24 800 tr/min",
+    "10 niveaux de puissance"
    ],
-   "image": "assets/img/catalogue/destockage/mixeur-plongeant-hendi-blend.jpg",
-   "pdf": "assets/fiches/destockage/mixeur-plongeant-hendi-blend.pdf",
+   "image": "assets/img/catalogue/destockage/blender-bar-hendi-230718.jpg",
+   "pdf": "assets/fiches/destockage/blender-bar-hendi-230718.pdf",
    "prix": "234 € HT"
   },
   {
