@@ -1,6 +1,7 @@
-// Demandes de devis : envoi depuis le domaine du site (Resend, domaine authentifié SPF/DKIM).
-// Variables Cloudflare Pages : RESEND_API_KEY (secret), DEVIS_TO (destinataire), DEVIS_FROM (optionnel).
-// Si l'envoi échoue, on répond 503 et le navigateur bascule sur l'envoi de secours (FormSubmit).
+// Demandes de devis : envoi par e-mail via Resend.
+// Variables Cloudflare Pages : RESEND_API_KEY (secret), DEVIS_TO (destinataire(s), séparés par des virgules),
+// DEVIS_FROM (expéditeur, ex. « EDM <devis@domaine-verifie> »). Si l'envoi échoue, on répond 503 et le site
+// affiche un message invitant à appeler.
 
 const FIELDS = [
   ["Profil", "Profil"],
@@ -43,7 +44,7 @@ export async function onRequestPost({ request, env }) {
   if (!v.Nom || !v.Description || !v.Commune || v["Téléphone"].replace(/\D/g, "").length < 9) {
     return json({ ok: false, error: "champs" }, 400);
   }
-  if (!env.RESEND_API_KEY || !env.DEVIS_TO) return json({ ok: false, error: "config" }, 503);
+  if (!env.RESEND_API_KEY || !env.DEVIS_TO || !env.DEVIS_FROM) return json({ ok: false, error: "config" }, 503);
 
   const rows = FIELDS.filter(([k]) => v[k]).map(([k, label]) => [label, v[k]]);
   const tel = v["Téléphone"].replace(/[^\d+]/g, "");
@@ -58,7 +59,7 @@ export async function onRequestPost({ request, env }) {
 
   const subject = `${urgent ? "URGENT · " : ""}Devis ${v.Profil || ""} · ${v.Appareil || v.Demande || "demande"} · ${v.Commune} (${v.Nom})`;
   const payload = {
-    from: env.DEVIS_FROM || "EDM Electro Dépannage Ménager <devis@edm66.fr>",
+    from: env.DEVIS_FROM,
     to: env.DEVIS_TO.split(",").map((s) => s.trim()).filter(Boolean),
     subject,
     html,

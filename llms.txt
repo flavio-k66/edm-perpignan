@@ -26,9 +26,9 @@
 
 ## Pages
 
-- [Accueil](https://flavio-k66.github.io/edm-perpignan/): présentation, choix de l'espace particuliers ou professionnels, équipe, avis, zone d'intervention, formulaire de devis
-- [Espace particuliers](https://flavio-k66.github.io/edm-perpignan/particuliers.html): réparation d'électroménager toutes marques à domicile ou en atelier, devis atelier, aides de l'État (bonus réparation), magasin
-- [Espace professionnels](https://flavio-k66.github.io/edm-perpignan/professionnels.html): dépannage en 4 h, services pros, contrats d'entretien, installation, réalisations, accès au showroom
-- [Showroom](https://flavio-k66.github.io/edm-perpignan/showroom.html): vente et leasing d'équipement de cuisine professionnelle
-- Catalogue du showroom : [Cuisson](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=cuisson), [Froid](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=froid), [Laverie](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=laverie), [Préparation](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=preparation), [Déstockage](https://flavio-k66.github.io/edm-perpignan/categorie.html?c=destockage) (fiches techniques, demande de devis ; prix affichés uniquement pour le déstockage)
-- [Mentions légales](https://flavio-k66.github.io/edm-perpignan/mentions-legales.html)
+- [Accueil](https://electro-depannage-menager.com/): présentation, choix de l'espace particuliers ou professionnels, équipe, avis, zone d'intervention, formulaire de devis
+- [Espace particuliers](https://electro-depannage-menager.com/particuliers.html): réparation d'électroménager toutes marques à domicile ou en atelier, devis atelier, aides de l'État (bonus réparation), magasin
+- [Espace professionnels](https://electro-depannage-menager.com/professionnels.html): dépannage en 4 h, services pros, contrats d'entretien, installation, réalisations, accès au showroom
+- [Showroom](https://electro-depannage-menager.com/showroom.html): vente et leasing d'équipement de cuisine professionnelle
+- Catalogue du showroom : [Cuisson](https://electro-depannage-menager.com/categorie.html?c=cuisson), [Froid](https://electro-depannage-menager.com/categorie.html?c=froid), [Laverie](https://electro-depannage-menager.com/categorie.html?c=laverie), [Préparation](https://electro-depannage-menager.com/categorie.html?c=preparation), [Déstockage](https://electro-depannage-menager.com/categorie.html?c=destockage) (fiches techniques, demande de devis ; prix affichés uniquement pour le déstockage)
+- [Mentions légales](https://electro-depannage-menager.com/mentions-legales.html)

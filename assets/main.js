@@ -250,11 +250,13 @@
     $('.upload__txt b', up).textContent = f ? f.name : 'Ajouter une photo';
   });
 
-  $('input[name="_next"]', form).value = new URL('merci.html', location.href).href;
-
-  // Sending: first through the site's own /api/devis function (Resend, Cloudflare Pages).
-  // If it is unavailable (static hosting) or fails, the form is posted to FormSubmit instead.
+  // Sending: the site's /api/devis function (Resend, Cloudflare Pages). Success -> thank-you page.
   let sending = false;
+  const fail = msg => {
+    err.textContent = msg;
+    err.hidden = false; sending = false; form.classList.remove('is-sending');
+    btnSubmit.firstChild.textContent = 'Envoyer ma demande ';
+  };
   form.addEventListener('submit', async e => {
     e.preventDefault();
     if (sending || !validate()) return;
@@ -264,17 +266,12 @@
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 20000);
     try {
-      const res = await fetch('api/devis', { method: 'POST', body: new FormData(form), signal: ctrl.signal });
+      const res = await fetch('/api/devis', { method: 'POST', body: new FormData(form), signal: ctrl.signal });
       const out = res.headers.get('content-type')?.includes('application/json') ? await res.json() : null;
       clearTimeout(timer);
-      if (res.ok && out?.ok) { location.href = 'merci.html'; return; }
-      if (res.status === 400 && out?.error === 'champs') {
-        err.textContent = 'Merci de vérifier votre nom, votre téléphone, votre commune et la description.';
-        err.hidden = false; sending = false; form.classList.remove('is-sending');
-        btnSubmit.firstChild.textContent = 'Envoyer ma demande ';
-        return;
-      }
+      if (res.ok && out?.ok) { location.href = '/merci.html'; return; }
+      if (res.status === 400 && out?.error === 'champs') return fail('Merci de vérifier votre nom, votre téléphone, votre commune et la description.');
     } catch { clearTimeout(timer); }
-    form.submit(); // backup sender (FormSubmit), redirects to merci.html
+    fail("Votre demande n'a pas pu être envoyée. Appelez-nous au 04 68 59 77 81.");
   });
 })();

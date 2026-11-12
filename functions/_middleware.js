@@ -1,8 +1,8 @@
-// Une seule adresse officielle : www.edm66.fr -> edm66.fr
+// Une seule adresse officielle : www.electro-depannage-menager.com -> electro-depannage-menager.com
 export async function onRequest({ request, next }) {
   const url = new URL(request.url);
-  if (url.hostname === "www.edm66.fr") {
-    url.hostname = "edm66.fr";
+  if (url.hostname === "www.electro-depannage-menager.com") {
+    url.hostname = "electro-depannage-menager.com";
     return Response.redirect(url.toString(), 301);
   }
   return next();

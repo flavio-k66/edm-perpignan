@@ -64,11 +64,7 @@
         <h2 id="dq-title">Ma demande de devis</h2>
         <button type="button" class="dq__x" data-close aria-label="Fermer">×</button>
       </div>
-      <form class="dq__form" action="https://formsubmit.co/contact@edm66.fr" method="POST" novalidate>
-        <input type="hidden" name="_subject" value="Demande showroom · site EDM">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="${esc(new URL('merci.html', location.href).href)}">
+      <form class="dq__form" action="/api/devis" method="POST" novalidate>
         <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off">
         <input type="hidden" name="Profil" value="Professionnel">
         <input type="hidden" name="Demande" value="Showroom">
@@ -161,7 +157,7 @@
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !dq.hidden) close(); });
   if (location.hash === '#demande') open();
 
-  /* ---------- Envoi : /api/devis (Resend), sinon FormSubmit ---------- */
+  /* ---------- Envoi : /api/devis (Resend) ---------- */
   let sending = false;
   form.addEventListener('submit', async e => {
     e.preventDefault();
@@ -187,20 +183,15 @@
     btn.textContent = 'Envoi en cours…';
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), 20000);
-    const done = () => { sel = []; save(); };
+    const fail = text => { err.textContent = text; err.hidden = false; sending = false; btn.textContent = 'Envoyer ma demande'; };
     try {
-      const res = await fetch('api/devis', { method: 'POST', body: new FormData(form), signal: ctrl.signal });
+      const res = await fetch('/api/devis', { method: 'POST', body: new FormData(form), signal: ctrl.signal });
       const out = res.headers.get('content-type')?.includes('application/json') ? await res.json() : null;
       clearTimeout(timer);
-      if (res.ok && out?.ok) { done(); location.href = 'merci.html'; return; }
-      if (res.status === 400 && out?.error === 'champs') {
-        err.textContent = 'Merci de vérifier votre nom, votre téléphone et votre commune.';
-        err.hidden = false; sending = false; btn.textContent = 'Envoyer ma demande';
-        return;
-      }
+      if (res.ok && out?.ok) { sel = []; save(); location.href = '/merci.html'; return; }
+      if (res.status === 400 && out?.error === 'champs') return fail('Merci de vérifier votre nom, votre téléphone et votre commune.');
     } catch { clearTimeout(timer); }
-    done();
-    form.submit(); // envoi de secours (FormSubmit), redirige vers merci.html
+    fail("Votre demande n'a pas pu être envoyée. Appelez-nous au 04 68 59 77 81.");
   });
 
   render();
